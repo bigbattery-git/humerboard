@@ -14,6 +14,7 @@ ul{
 }
 
 body{
+  min-width: 56.875rem;
   max-width: 64rem;
   margin: auto;
 }
