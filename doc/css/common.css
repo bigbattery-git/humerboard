@@ -16,7 +16,12 @@ ul{
 body{
   min-width: 56.875rem;
   max-width: 64rem;
+  min-height: 100vh;
   margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* header */
@@ -85,7 +90,7 @@ nav{
 
   padding : 0 32px;
 
-  background-color: #7CB2D2;
+  background-color: rgba(124, 178, 210, 0.8);
 }
 
 /* leftside */
