@@ -31,10 +31,133 @@ INSERT INTO users(
 	,PASSWORD
 )
 VALUES(
-	'testname'
+	'testname1'
 	,HEX(AES_ENCRYPT('123456789','testkey'))
+),
+(
+	'testname2'
+	,HEX(AES_ENCRYPT('13579','testkey'))
+),
+(
+	'testname3'
+	,HEX(AES_ENCRYPT('24680','testkey'))
+),
+(
+	'testname4'
+	,HEX(AES_ENCRYPT('13456','testkey'))
+),
+(
+	'testname5'
+	,HEX(AES_ENCRYPT('12345','testkey'))
+),
+(
+	'testname6'
+	,HEX(AES_ENCRYPT('18888','testkey'))
+),
+(
+	'testname7'
+	,HEX(AES_ENCRYPT('17987','testkey'))
+),
+(
+	'testname8'
+	,HEX(AES_ENCRYPT('123123','testkey'))
+),
+(
+	'testname9'
+	,HEX(AES_ENCRYPT('88524','testkey'))
+),
+(
+	'testname10'
+	,HEX(AES_ENCRYPT('16848','testkey'))
 );
+
 
 SELECT CONVERT(AES_DECRYPT(UNHEX(PASSWORD),'testkey') USING UTF8)
 FROM users
 ;
+
+INSERT INTO boards(
+	user_id
+	,title
+	,content
+	,views
+)
+VALUES(
+	10
+	,'아무거나1'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	2
+	,'아무거나2'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	3
+	,'아무거나3'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	4
+	,'아무거나4'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	5
+	,'아무거나5'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	6
+	,'아무거나6'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	7
+	,'아무거나7'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	8
+	,'아무거나8'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	9
+	,'아무거나9'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	10
+	,'아무거나10'
+	,'아무거나 입력했습니다1'
+	,1
+),
+(
+	11
+	,'아무거나11'
+	,'아무거나 입력했습니다1'
+	,1
+);
+
+SELECT boards.board_id, boards.title, users.user_name, boards.created_at, boards.views
+FROM boards
+	JOIN users
+	ON boards.user_id = users.user_id
+ORDER BY boards.board_id DESC
+LIMIT 10
+OFFSET 0
+;
+
+UPDATE boards
+SET created_at = '2000-12-30 00:00:01'
+WHERE board_id = 1;
