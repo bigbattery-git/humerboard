@@ -87,6 +87,19 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
     "pw" => $user_password
   ];
 
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : is_already_account");
+  }
+
+  $result = $stmt -> fetch();
+
+  if(!is_null($result) || !isset($result)){
+    return false;
+  }
+
   return true;
 }
 
@@ -115,7 +128,7 @@ function is_already_user_name(PDO $conn, string $user_name){
     throw new Exception("Error - Query failed : is_already_user_name");
   }
 
-  if(!is_null($stmt) || !isset($stmt)){
+  if(!is_null($result) || !isset($result)){
     return false;
   }
 
