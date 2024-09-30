@@ -3,58 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <script src="https://kit.fontawesome.com/351a912326.js" crossorigin="anonymous"></script>
   <title>Document</title>
 </head>
 <body>
   <header>
     <nav>
       <div class="leftside">
-        <div class="logo"></div>
+        <a href="#"><div class="logo"></div></a>
       </div>
       <div class="rightside">
         <ul class="rightside-ul">
-          <li class="rightside-ul-li">디지털 세계 안내</li>
-          <li class="rightside-ul-li">세계 게시판</li>
-          <li class="rightside-ul-li">로그인</li>
-          <li class="rightside-ul-li">회원가입</li>
+          <a href="#"><li class="rightside-ul-li">디지털 세계 안내</li></a>
+          <a href="#"><li class="rightside-ul-li">세계 게시판</li></a>
+          <a href="#"><li class="rightside-ul-li li-member">로그인</li></a>
+          <a href="#"><li class="rightside-ul-li li-member">회원가입</li></a>
         </ul>
       </div>
     </nav>
   </header>
 
   <main>
-    <div class="main-container">
-      <div class="main-title_area">
-        <a href="#"><h1 class="main-title_area-text">게시판</h1></a>
+      <a href="#">
+        <div class="main-title_area">
+          <h1 class="main-title_area-text">게시판</h1>
+        </div>
+      </a>
+      
+      <div class="main-details">
+        <div class="main-board_title_area">
+          <p class="main-board_title_area-text">제목</p>
+        </div>
+  
+        <ul class="main-intro-ul">
+          <li class="main-intro-li user_name">작성자</li>
+          <li class="main-intro-li created_at">작성시간</li>
+          <li class="main-intro-li views">조회수</li>
+        </ul>
+  
+        <div class="main-content_area">
+          <textarea name="content" id="content" readonly>내용</textarea>
+        </div>
+  
+        <div class="utility">
+          <div class="utility-buttons">
+            <a href="#" class="utility-a">
+              <button class="utility-button">게시글 수정</button>
+            </a>
+            <a href="#" class="utility-a">
+              <button class="utility-button delete">게시글 삭제</button>
+            </a>
+          </div>
+          <a href="#" class="utility-a">
+            <div class="utility-back">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+          </a>
       </div>
-
-      <div class="main-board_title_area">
-        <p class="main-board_title_area-text">제목</p>
       </div>
-
-      <ul class="main-intro-ul">
-        <li class="main-intro-li">작성자</li>
-        <li class="main-intro-li">작성시간</li>
-        <li class="main-intro-li">조회수</li>
-      </ul>
-
-      <div class="main-content_area">
-        <textarea name="content" id="content" readonly>내용</textarea>
-      </div>
-
-      <div class="utility">
-        <a href="#" class="utility-a">
-          <button class="utility-button">게시글 수정</button>
-        </a>
-        <a href="#" class="utility-a">
-          <button class="utility-button delete">게시글 삭제</button>
-        </a>
-        <a href="#" class="utility-a">
-          <div class="utility-button back"></div>
-        </a>
-      </div>
-
-    </div>
   </main>
 
   <footer>
