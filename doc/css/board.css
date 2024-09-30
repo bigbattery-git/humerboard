@@ -111,7 +111,7 @@ form button{
 
 .utility{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   gap: 1rem;
 
@@ -125,7 +125,8 @@ form button{
 
 .utility-board_list_num-ul{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width : 39.625rem;
+  gap : 1rem;
+  width : 100%;
 }

@@ -1,5 +1,7 @@
 <?php
 
+require_once($_SERVER["DOCUMENT_ROOT"]."/config.php");
+
 function my_db_conn(){
   //  PDO 옵션 설정
   $my_otp = [
@@ -20,7 +22,7 @@ function my_db_conn(){
 /**
  * 게시판 리스트 받아오기
  * @param $conn = PDO Class
- * @param $arr_param = $offset => value
+ * @param $arr_param = limit, offset
  */
 function get_board_list(PDO $conn, array $arr_param){
   
@@ -36,7 +38,7 @@ function get_board_list(PDO $conn, array $arr_param){
 	" ON                             ". 
   " boards.user_id = users.user_id ".
   " ORDER BY boards.board_id DESC  ".
-  " LIMIT 10                       ".
+  " LIMIT :limit                   ".
   " OFFSET :offset                 ";
 
   $stmt = $conn -> prepare($sql);
@@ -49,4 +51,73 @@ function get_board_list(PDO $conn, array $arr_param){
   $result = $stmt -> fetchAll();
 
   return $result;
+}
+
+function get_board_count(PDO $conn){
+  $sql=
+  " SELECT COUNT(*) AS 'count'".
+  " FROM boards ".
+  " WHERE deleted_at IS NULL "
+  ;
+
+  $stmt = $conn -> query($sql);
+
+  $result = $stmt -> fetch();
+  return $result["count"];
+}
+
+function is_already_account(PDO $conn, string $user_name, string $user_password){
+
+  // 아이디 있는지 확인, 비밀번호 있는지 확인
+  
+  if(!is_already_user_name($conn, $user_name)){
+    return false;
+  }
+
+  $sql = 
+  " SELECT PASSWORD ".
+  " FROM ".
+  " users ".
+  " WHERE ". 
+  " CONVERT(AES_DECRYPT(UNHEX(PASSWORD),'testkey') USING UTF8) = :pw ".
+  " ; "
+  ;
+
+  $arr_prepare = [
+    "pw" => $user_password
+  ];
+
+  return true;
+}
+
+function is_already_user_name(PDO $conn, string $user_name){
+
+  $sql =
+  " SELECT                 ".
+  " user_name              ".
+  " FROM                   ".
+  " users                  ".
+  " WHERE                  ". 
+  " user_name = :user_name ".
+  " ; ";
+
+  $arr_prepare = [
+    "user_name" => $user_name
+  ];
+
+  $stmt = $conn -> prepare($sql);
+
+  $result_flg = $stmt->execute($arr_prepare);
+
+  $result = $stmt->fetch();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : is_already_user_name");
+  }
+
+  if(!is_null($stmt) || !isset($stmt)){
+    return false;
+  }
+
+  return true;
 }

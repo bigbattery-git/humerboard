@@ -158,6 +158,20 @@ LIMIT 10
 OFFSET 0
 ;
 
-UPDATE boards
-SET created_at = '2000-12-30 00:00:01'
-WHERE board_id = 1;
+SELECT COUNT(*)
+FROM boards
+WHERE deleted_at IS NULL
+;
+
+SELECT
+user_name
+FROM 
+users
+WHERE 
+user_name = :user_name
+;
+
+SELECT PASSWORD
+FROM users
+WHERE PASSWORD = AES_ENCRYPT('13456','testkey')
+;

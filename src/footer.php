@@ -1,7 +1,7 @@
 <footer>
   <div class="footer-nev">
     <div class="footer-nev-leftside">
-      <a href="#"><div class="footer-nev-leftside-logo"></div></a>
+      <a href="/index.php"><div class="footer-nev-leftside-logo"></div></a>
     </div>
     <div class="footer-nev-rightside">
       <ul class="footer-nev-rightside-ul">

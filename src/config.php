@@ -16,3 +16,8 @@ define("MY_ROOT_UTILITY", MY_ROOT."lib/utility.php");
 
 define("MY_ROOT_HEADER", MY_ROOT."header.php");
 define("MY_ROOT_FOOTER", MY_ROOT."footer.php");
+
+define("MY_BOARD_COUNT_BY_ONE_PAGE", 10);
+define("MY_BOARD_COUNT_BY_LIST", 10);
+
+define("SECURITY_KEY","testkey");

@@ -1,5 +1,5 @@
 <?php
-
+  require_once($_SERVER["DOCUMENT_ROOT"]."/config.php");
 ?>
 
 <!DOCTYPE html>
@@ -12,21 +12,9 @@
   <title>Document</title>
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="leftside">
-        <a href="#"><div class="logo"></div></a>
-      </div>
-      <div class="rightside">
-        <ul class="rightside-ul">
-          <a href="#"><li class="rightside-ul-li">디지털 세계 안내</li></a>
-          <a href="#"><li class="rightside-ul-li">세계 게시판</li></a>
-          <a href="#"><li class="rightside-ul-li li-member">로그인</li></a>
-          <a href="#"><li class="rightside-ul-li li-member">회원가입</li></a>
-        </ul>
-      </div>
-    </nav>
-  </header>
+  <?php
+    require_once(MY_ROOT_HEADER);
+  ?>
 
   <main>
     <div class="board">
@@ -157,22 +145,8 @@
     </div>
   </main>
 
-  <footer>
-    <div class="footer-nev">
-      <div class="footer-nev-leftside">
-        <a href="#"><div class="footer-nev-leftside-logo"></div></a>
-      </div>
-      <div class="footer-nev-rightside">
-        <ul class="footer-nev-rightside-ul">
-          <li class="footer-nev-rightside-ul-li">관리자 연결</li>
-          <li class="footer-nev-rightside-ul-li">email: dbdnjstkd369@gmail.com</li>
-          <li class="footer-nev-rightside-ul-li">phone num : 010.1234.5678</li>
-        </ul>
-      </div>
-    </div>
-    <div class="copyright">
-      <p class="copyright-title">© Digital world</p>
-    </div>
-  </footer>
+  <?php
+    require_once(MY_ROOT_FOOTER);
+  ?>
 </body>
 </html>

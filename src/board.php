@@ -6,20 +6,24 @@
   $conn = null;
   try{
     $conn = my_db_conn();
-    $offset = 0;
+    $board_count = get_board_count($conn);
+
+    $page = isset($_GET["page"]) ? $_GET["page"] : 1;
+
+    $board_list_count = ceil($board_count/MY_BOARD_COUNT_BY_ONE_PAGE);
+
+    $offset = MY_BOARD_COUNT_BY_ONE_PAGE * ($page - 1);
 
     $arr_prepare = [
+      "limit" => MY_BOARD_COUNT_BY_ONE_PAGE,
       "offset" => $offset 
     ];
 
     $result = get_board_list($conn, $arr_prepare);
-
-    
   }
   catch(Throwable $th){
 
     $th->getMessage();
-    exit;
 
   }
 ?>
@@ -77,19 +81,18 @@
           </div>
         <?php } ?>
       </div>
+
       <div class="utility">
-        <a href="#"><button class="utility-button">글 작성</button></a>
+        <div class="utility-button_area">
+          <?php if(is_logined()) { ?>
+              <a href="#"><button class="utility-button">글 작성</button></a>
+          <?php }?>
+        </div>
         <ul class="utility-board_list_num-ul">
           <li class="utility-board_list_num-li"><a href="">이전</a></li>
-          <li class="utility-board_list_num-li"><a href="">1</a></li>
-          <li class="utility-board_list_num-li"><a href="">2</a></li>
-          <li class="utility-board_list_num-li"><a href="">3</a></li>
-          <li class="utility-board_list_num-li"><a href="">4</a></li>
-          <li class="utility-board_list_num-li"><a href="">5</a></li>
-          <li class="utility-board_list_num-li"><a href="">6</a></li>
-          <li class="utility-board_list_num-li"><a href="">7</a></li>
-          <li class="utility-board_list_num-li"><a href="">8</a></li>
-          <li class="utility-board_list_num-li"><a href="">9</a></li>
+          <?php for($i = 1; $i <= $board_list_count; $i++){ ?>
+            <li class="utility-board_list_num-li"><a href="/board.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+          <?php } ?> 
           <li class="utility-board_list_num-li"><a href="">다음</a></li>
         </ul>
       </div>
