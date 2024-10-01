@@ -75,11 +75,10 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
   }
 
   $sql = 
-  " SELECT PASSWORD ".
-  " FROM ".
-  " users ".
-  " WHERE ". 
-  " CONVERT(AES_DECRYPT(UNHEX(PASSWORD),'testkey') USING UTF8) = :pw ".
+  " SELECT ". 
+  " CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw ".
+  " FROM users ".
+  " WHERE CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = :pw ".
   " ; "
   ;
 
@@ -96,7 +95,8 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
 
   $result = $stmt -> fetch();
 
-  if(!is_null($result) || !isset($result)){
+  if($result["pw"] !== $user_password){
+    throw new Exception("계정이 없거나 비밀번호가 맞지 않습니다.");
     return false;
   }
 
@@ -107,7 +107,7 @@ function is_already_user_name(PDO $conn, string $user_name){
 
   $sql =
   " SELECT                 ".
-  " user_name              ".
+  " user_name as id        ".
   " FROM                   ".
   " users                  ".
   " WHERE                  ". 
@@ -128,7 +128,8 @@ function is_already_user_name(PDO $conn, string $user_name){
     throw new Exception("Error - Query failed : is_already_user_name");
   }
 
-  if(!is_null($result) || !isset($result)){
+  if($result["id"] !== $user_name){
+    throw new Exception("아이디가 존재하지 않습니다.");
     return false;
   }
 

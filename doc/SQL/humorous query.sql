@@ -173,5 +173,19 @@ user_name = :user_name
 
 SELECT PASSWORD
 FROM users
-WHERE PASSWORD = AES_ENCRYPT('13456','testkey')
+WHERE CONVERT(AES_DECRYPT(UNHEX(PASSWORD),'testkey') USING UTF8) = '13456'
+;
+
+INSERT INTO users(
+	user_name,
+	password
+)
+VALUES(
+	'dbdnjstkd369',
+	HEX(AES_ENCRYPT('Wkwkdaus12!@','testkey'))
+);
+
+SELECT *
+FROM users
+WHERE user_name = 'dbdnjstkd369'
 ;
