@@ -25,6 +25,10 @@
   }
   catch(Throwable $th){
 
+    if(!is_null($conn) && $conn -> inTransaction()){
+      $conn -> rollBack();
+    }
+
     $th->getMessage();
 
   }
@@ -35,8 +39,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/common.css">
-  <link rel="stylesheet" href="../css/board.css">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/board.css">
   <script src="https://kit.fontawesome.com/351a912326.js" crossorigin="anonymous"></script>
   <title>Document</title>
 </head>
@@ -46,7 +50,7 @@
   ?>
 
   <main>
-      <a href="#">
+      <a href="/board.php">
         <div class="main-title_area">
           <h1 class="main-title_area-text">게시판</h1>
         </div>
@@ -75,7 +79,7 @@
           <div class="board">
             <ul class="board-ul">
               <li class="board-ul-li id"><?php echo $value["board_id"]; ?></li>
-              <li class="board-ul-li title"><a href="detail.php?board_id=<?php echo $value["board_id"]; ?>"><?php echo $value["title"]; ?></a></li>
+              <li class="board-ul-li title"><a href="detail.php?<?php echo "board_id=".$value["board_id"]."&page=".$page; ?>"><?php echo $value["title"]; ?></a></li>
               <li class="board-ul-li user_name"><?php echo $value["user_name"]; ?></li>
               <li class="board-ul-li created_at"><?php echo get_date_formet($value["created_at"]); ?></li>
               <li class="board-ul-li views"><?php echo $value["views"]; ?></li>
@@ -87,7 +91,7 @@
       <div class="utility">
         <div class="utility-button_area">
           <?php if(isset($_SESSION["id"])) { ?>
-              <a href="#"><button class="utility-button">글 작성</button></a>
+              <a href="/insert.php"><button class="utility-button">글 작성</button></a>
           <?php }?>
         </div>
         <ul class="utility-board_list_num-ul">

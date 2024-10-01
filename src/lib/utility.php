@@ -17,4 +17,3 @@
   function start_section(string $id, string $password){
     start_section($id, $password);
   }
-?>

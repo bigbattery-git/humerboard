@@ -82,10 +82,13 @@ main{
 .main-content_area textarea{
   width: 100%;
   min-height: 10rem;
+  height: auto;
   resize: none;
 
   border: none;
   outline: none;
+
+  overflow: hidden;
 
   padding: 1rem;
 }

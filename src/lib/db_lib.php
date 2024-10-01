@@ -172,3 +172,96 @@ function join_membership(PDO $conn, string $user_name, string $user_password){
     throw new Exception("Error - Query count over : join_membership");
   }
 }
+
+function get_board_detail(PDO $conn, int $board_id){
+
+  $sql = 
+  " SELECT                            ".
+  " boards.board_id,                  ".
+  " boards.title,                     ".
+  " users.user_name,                  ". 
+  " boards.created_at,                ". 
+  " boards.views,                     ".
+  " boards.content                    ".
+  " FROM boards                       ".
+	" JOIN users                        ".
+	" ON boards.user_id = users.user_id ".
+	" AND boards.board_id = :board_id   ".
+  " ;                                 "
+  ;
+
+  $arr_prepare = [
+    "board_id" => $board_id
+  ];
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : get_board_detail");
+  }
+
+  return $stmt->fetch();
+}
+
+function add_views(PDO $conn, int $board_id, int $views){
+
+  $sql = 
+  " UPDATE boards          ".
+  " SET updated_at = NOW() ".
+	" ,views = :views        ".
+  " WHERE board_id =       ".
+  " :board_id              ".
+  " ;                      "
+  ;
+
+  $arr_prepare = [
+    "views"    => $views,
+    "board_id" => $board_id
+  ];
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : add_views");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : add_views");
+  }
+}
+
+function insert_board(PDO $conn, array $arr_param){
+
+  $sql = 
+  " INSERT INTO boards(                                      ".
+  " user_id,                                                 ".
+  " title,                                                   ".
+  " content,                                                 ".
+  " views                                                    ".
+  " )                                                        ".
+  " VALUES(                                                  ".
+  " (SELECT user_id FROM users WHERE user_name = :user_name) ".
+  " ,:title                                                  ".
+  " ,:content                                                ".
+  " ,1                                                       ".
+  " )                                                        ".
+  " ;                                                        "
+  ;
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_param);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : insert_board");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : insert_board");
+  }
+
+  return $conn -> lastInsertId();
+}
