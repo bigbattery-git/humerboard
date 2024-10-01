@@ -189,3 +189,20 @@ SELECT *
 FROM users
 WHERE user_name = 'dbdnjstkd369'
 ;
+
+SELECT 
+CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw
+FROM users
+WHERE user_name = 'dbdnjstkd369'
+AND CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = 'Wkwkdaus12!@'
+;
+
+INSERT INTO users(
+	user_name
+	,PASSWORD
+)
+VALUES(
+	:user_name
+	,:password
+);
+

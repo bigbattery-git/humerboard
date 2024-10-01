@@ -26,3 +26,7 @@
   border-radius: 10px;
   color: white;
 }
+
+.main-button:hover{
+  cursor: pointer;
+}

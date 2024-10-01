@@ -71,6 +71,7 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
   // 아이디 있는지 확인, 비밀번호 있는지 확인
   
   if(!is_already_user_name($conn, $user_name)){
+    throw new Exception("아이디가 존재하지 않습니다.");
     return false;
   }
 
@@ -78,11 +79,13 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
   " SELECT ". 
   " CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw ".
   " FROM users ".
-  " WHERE CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = :pw ".
+  " WHERE user_name = :user_name ".
+  " AND CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = :pw ".
   " ; "
   ;
 
   $arr_prepare = [
+    "user_name" => $user_name,
     "pw" => $user_password
   ];
 
@@ -129,9 +132,43 @@ function is_already_user_name(PDO $conn, string $user_name){
   }
 
   if($result["id"] !== $user_name){
-    throw new Exception("아이디가 존재하지 않습니다.");
     return false;
   }
 
   return true;
+}
+
+function join_membership(PDO $conn, string $user_name, string $user_password){
+
+  if(is_already_user_name($conn, $user_name)){
+    throw new Exception("이미 존재하는 아이디입니다.");
+  }
+
+  $sql =
+  " INSERT INTO users( ".
+  " user_name,         ".
+  " password           ".
+  " )                  ".
+  " VALUES(            ".
+  " :user_name         ".
+  " ,HEX(AES_ENCRYPT(:user_password,'testkey'))".
+  " ); "
+  ;
+
+  $arr_prepare = [
+    "user_name" => $user_name,
+    "user_password" => $user_password
+  ];
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt->execute($arr_prepare);
+  $result_cnt = $stmt->rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : join_membership");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : join_membership");
+  }
 }

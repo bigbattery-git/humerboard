@@ -3,6 +3,8 @@
   require_once(MY_ROOT_DB_LIB);
   require_once(MY_ROOT_UTILITY);
 
+  session_start();
+
   $conn = null;
   try{
     $conn = my_db_conn();
@@ -73,7 +75,7 @@
           <div class="board">
             <ul class="board-ul">
               <li class="board-ul-li id"><?php echo $value["board_id"]; ?></li>
-              <li class="board-ul-li title"><a href="detail.php?<?php echo $value["board_id"]; ?>"><?php echo $value["title"]; ?></a></li>
+              <li class="board-ul-li title"><a href="detail.php?board_id=<?php echo $value["board_id"]; ?>"><?php echo $value["title"]; ?></a></li>
               <li class="board-ul-li user_name"><?php echo $value["user_name"]; ?></li>
               <li class="board-ul-li created_at"><?php echo get_date_formet($value["created_at"]); ?></li>
               <li class="board-ul-li views"><?php echo $value["views"]; ?></li>
@@ -84,7 +86,7 @@
 
       <div class="utility">
         <div class="utility-button_area">
-          <?php if(is_logined()) { ?>
+          <?php if(isset($_SESSION["id"])) { ?>
               <a href="#"><button class="utility-button">글 작성</button></a>
           <?php }?>
         </div>

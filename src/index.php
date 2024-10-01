@@ -3,7 +3,7 @@
   require_once(MY_ROOT_DB_LIB);
 
   try{
-
+    session_start();
   }
   catch(Throwable $th){
     

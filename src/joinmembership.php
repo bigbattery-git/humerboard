@@ -4,25 +4,29 @@
   require_once(MY_ROOT_DB_LIB);
   require_once(MY_ROOT_UTILITY);
 
+  $conn = null;
   try{
     if(strtoupper($_SERVER["REQUEST_METHOD"]) === "POST"){
-      $id = isset($_POST["id"]) ? $_POST["id"] : "";
-      $password = isset($_POST["pw"]) ? $_POST["pw"] : "";
       $conn = my_db_conn();
+      $user_name = isset($_POST["id"]) ? $_POST["id"] : "";
+      $password = isset($_POST["pw"]) ? $_POST["pw"] : "";
+
+      $conn -> beginTransaction();
+
+      join_membership($conn, $user_name, $password);
   
-      if(!is_already_account($conn, $id, $password)){
-        throw new Exception("계정이 옳지 않습니다.".$id."\n".$password."\n");
-      }
-  
-      session_start();
-  
-      $_SESSION["id"] = $id;
-      
-      header("Location: /index.php");
-    }      
+      $conn -> commit();
+
+      header("Location: /joincomplete.php");
+    }
   }
   catch(Throwable $th){
+    if(!is_null($conn) && $conn -> inTransaction()){
+      $conn -> rollBack();
+    }
+
     echo $th -> getMessage();
+
     exit;
   }
 ?>
@@ -46,7 +50,7 @@
     <div class="main-container">
       <div class="main-title">
         <h1 class="main-title-text">
-          로그인
+          회원가입
         </h1>
       </div>
       <hr>
@@ -67,16 +71,11 @@
           </label>
           <input type="password" name="pw" id="pw" placeholder="비밀번호" required>
         </div>
-        <button type="submit">로그인</button>
+        <button type="submit">가입하기</button>
       </form>
       <div class="main-link_login">
         <p class="main-link_login-text">
-          선택받길 원하신다면 <a href="#">회원가입</a>
-        </p>
-      </div>
-      <div class="main-link_login">
-        <p class="main-link_login-text">
-          선택받은 비밀번호를 잃어버리셨다면 <a href="#">비밀번호 찾기</a>
+          계정을 갖고 계신다면 <a href="#">로그인</a>
         </p>
       </div>
     </div>

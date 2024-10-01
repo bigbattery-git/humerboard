@@ -14,15 +14,6 @@
     }
   }
 
-  function is_logined(string $id = null, string $password = null){
-
-    if(is_null($id) || is_null($password)){
-      return false;
-    }
-
-    return true;
-  }
-
   function start_section(string $id, string $password){
     start_section($id, $password);
   }
