@@ -206,3 +206,50 @@ VALUES(
 	,:password
 );
 
+INSERT INTO boards(
+		
+)
+VALUES(
+
+);
+
+SELECT boards.board_id, boards.title, users.user_name, boards.created_at, boards.views, boards.content
+FROM boards
+	JOIN users
+	ON boards.user_id = users.user_id
+	AND boards.board_id = 3
+;
+
+UPDATE boards
+SET updated_at = NOW()
+	,views = 2
+WHERE board_id = 3
+;
+
+SELECT boards.board_id, boards.title, users.user_name, boards.created_at, boards.views, boards.content
+FROM boards
+	JOIN users
+	ON boards.user_id = users.user_id
+	AND boards.board_id = 3
+;
+
+INSERT INTO boards(
+	user_id,
+	title,
+	content,
+	views
+)
+VALUES(
+	(SELECT user_id FROM users WHERE user_name = 'dbdnjstkd369')
+	,'사랑합니다'
+	,'오랑합니다'
+	,1
+)
+
+UPDATE boards
+SET 
+title = :title
+,content = :content
+WHERE 
+board_id = :board_id
+;
