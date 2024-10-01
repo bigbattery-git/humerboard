@@ -76,7 +76,13 @@
       </div>
 
       <div class="main-content_area">
-        <textarea name="content" id="content" placeholder="내용을 입력하세요" required></textarea>
+        <textarea name="content" id="content" placeholder="내용을 입력하세요" required oninput="autoResize(this)"></textarea>
+        <script>
+          function autoResize(textarea) {
+            textarea.style.height = 'auto' // 높이를 자동으로 초기화
+            textarea.style.height = textarea.scrollHeight + 'px' // 스크롤 높이에 맞게 높이 설정
+          }
+        </script>
       </div>
 
       <div class="utility">

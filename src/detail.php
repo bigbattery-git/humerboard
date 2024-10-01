@@ -8,12 +8,12 @@
   try{
     $conn = my_db_conn();
     $board_id = isset($_GET["board_id"]) ? (int)$_GET["board_id"] : 0;
-    $user_id = isset($_SESSION["id"]) ?  $_SESSION["id"] : "";
+    $user_name = isset($_SESSION["id"]) ?  $_SESSION["id"] : "";
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
 
     $result = get_board_detail($conn, $board_id);
 
-    $is_myboard = $result["user_name"] === $user_id ? true : false; 
+    $is_myboard = $result["user_name"] === $user_name ? true : false; 
 
     $conn -> beginTransaction();
 
@@ -55,7 +55,7 @@
       
       <div class="main-details">
         <div class="main-board_title_area">
-          <p class="main-board_title_area-text"><?php echo $result["title"]; ?></p>
+          <p class="main-board_title_area-text"><?php echo get_title_formet($result["title"], 25); ?></p>
         </div>
   
         <ul class="main-intro-ul">
@@ -65,13 +65,13 @@
         </ul>
   
         <div class="main-content_area">
-          <textarea name="content" id="content" readonly><?php echo $result["content"]; ?></textarea>
+          <textarea name="content" id="content" readonly rows="<?php echo mb_substr_count($result["content"], "\n"); ?>" ><?php echo $result["content"]; ?></textarea>
         </div>
   
         <div class="utility">
           <div class="utility-buttons">
             <?php if($is_myboard) { ?>
-            <a href="#" class="utility-a">
+            <a href="/update.php?<?php echo "board_id=".$board_id."&user_name=".$user_name."&page=".$page ?>" class="utility-a">
               <button class="utility-button">게시글 수정</button>
             </a>
             <a href="#" class="utility-a">

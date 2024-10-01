@@ -79,7 +79,7 @@
           <div class="board">
             <ul class="board-ul">
               <li class="board-ul-li id"><?php echo $value["board_id"]; ?></li>
-              <li class="board-ul-li title"><a href="detail.php?<?php echo "board_id=".$value["board_id"]."&page=".$page; ?>"><?php echo $value["title"]; ?></a></li>
+              <li class="board-ul-li title"><a href="detail.php?<?php echo "board_id=".$value["board_id"]."&page=".$page; ?>"><?php echo get_title_formet($value["title"]); ?></a></li>
               <li class="board-ul-li user_name"><?php echo $value["user_name"]; ?></li>
               <li class="board-ul-li created_at"><?php echo get_date_formet($value["created_at"]); ?></li>
               <li class="board-ul-li views"><?php echo $value["views"]; ?></li>

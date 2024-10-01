@@ -2,6 +2,9 @@
 
 require_once($_SERVER["DOCUMENT_ROOT"]."/config.php");
 
+/**
+ * PDO 클래스 받아오기
+ */
 function my_db_conn(){
   //  PDO 옵션 설정
   $my_otp = [
@@ -53,6 +56,10 @@ function get_board_list(PDO $conn, array $arr_param){
   return $result;
 }
 
+/**
+ * boards 테이블 레코드 수 받아오기
+ */
+
 function get_board_count(PDO $conn){
   $sql=
   " SELECT COUNT(*) AS 'count'".
@@ -65,6 +72,12 @@ function get_board_count(PDO $conn){
   $result = $stmt -> fetch();
   return $result["count"];
 }
+
+/**
+ * 계정이 있는지 없는지 확인하기
+ * @param $user_name = 아이디 입력 정보
+ * @param $user_password = 비밀번호 입력 정보 
+ */
 
 function is_already_account(PDO $conn, string $user_name, string $user_password){
 
@@ -106,6 +119,11 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
   return true;
 }
 
+/**
+ * 아이디 있는지 확인하기 
+ * @param $user_name = 유저 이름 정보
+ */
+
 function is_already_user_name(PDO $conn, string $user_name){
 
   $sql =
@@ -137,6 +155,12 @@ function is_already_user_name(PDO $conn, string $user_name){
 
   return true;
 }
+
+/**
+ * 회원가입 하기
+ * @param $user_name = 회원가입 시 아이디 정보 
+ * @param $user_password = 회원가입 시 비밀번호 정보
+ */
 
 function join_membership(PDO $conn, string $user_name, string $user_password){
 
@@ -173,6 +197,12 @@ function join_membership(PDO $conn, string $user_name, string $user_password){
   }
 }
 
+/**
+ * 게시판에서 게시글 볼 때 정보 받아오기
+ * 
+ * @param $board_id = 게시글 번호
+ */
+
 function get_board_detail(PDO $conn, int $board_id){
 
   $sql = 
@@ -204,6 +234,13 @@ function get_board_detail(PDO $conn, int $board_id){
   return $stmt->fetch();
 }
 
+/**
+ * 조회수 1씩 증가하기
+ * 
+ * @param $board_id = 조회수 늘릴 게시글 번호
+ * @param $views = 적용할 조회수 (1씩 자동증가 아님)
+ */
+
 function add_views(PDO $conn, int $board_id, int $views){
 
   $sql = 
@@ -232,6 +269,12 @@ function add_views(PDO $conn, int $board_id, int $views){
     throw new Exception("Error - Query count over : add_views");
   }
 }
+
+/**
+ * 게시글 작성하기
+ * 
+ * @param $arr_param = :user_name, :title, :content
+ */
 
 function insert_board(PDO $conn, array $arr_param){
 
@@ -264,4 +307,36 @@ function insert_board(PDO $conn, array $arr_param){
   }
 
   return $conn -> lastInsertId();
+}
+
+/**
+ * 게시글 수정하기
+ * 
+ * @param $arr_param = :title, :content, :board_id
+ */
+
+function update_board(PDO $conn, array $arr_param){
+
+  $sql =
+  " UPDATE boards        ".
+  " SET                  ".
+  " title = :title       ".
+  " ,content = :content  ".
+  " ,updated_at = NOW()  ".
+  " WHERE                ". 
+  " board_id = :board_id ".
+  " ;                    "
+  ;
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_param);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : update_board");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : update_board");
+  }
 }
