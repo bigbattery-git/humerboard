@@ -9,7 +9,7 @@
     </div>
     <div class="rightside">
       <ul class="rightside-ul">
-        <a href="#"><li class="rightside-ul-li">디지털 세계 안내</li></a>
+        <a href="/aboutme.php"><li class="rightside-ul-li">디지털 세계 안내</li></a>
         <a href="/board.php"><li class="rightside-ul-li">세계 게시판</li></a>
         <?php if(isset($_SESSION["id"])) {?>
           <a href="/logout.php"><li class="rightside-ul-li li-member">로그아웃</li></a>
