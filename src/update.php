@@ -5,14 +5,14 @@
   session_start();
 
   $conn;
-  $user_name;
+  $user_id;
   $board_id;
   $page;
 
   try{
 
     if(isset($_SESSION["id"])){
-      $user_name = $_SESSION["id"];
+      $user_id = $_SESSION["id"];
     }
     else{
       throw new Exception("비정상적인 접근입니다. 로그인 후 사용하세요.");
@@ -46,7 +46,7 @@
 
       $conn -> commit();
 
-      header("Location: /detail.php?board_id=".$board_id."&page=".$page."&user_name=".$user_name);
+      header("Location: /detail.php?board_id=".$board_id."&page=".$page."&user_id=".$user_id);
     }
   }
 

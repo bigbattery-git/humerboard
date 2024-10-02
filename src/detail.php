@@ -8,12 +8,12 @@
   try{
     $conn = my_db_conn();
     $board_id = isset($_GET["board_id"]) ? (int)$_GET["board_id"] : 0;
-    $user_name = isset($_SESSION["id"]) ?  $_SESSION["id"] : "";
+    $user_id = isset($_SESSION["id"]) ?  $_SESSION["id"] : "";
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
 
     $result = get_board_detail($conn, $board_id);
 
-    $is_myboard = $result["user_name"] === $user_name ? true : false; 
+    $is_myboard = $result["user_id"] === $user_id ? true : false; 
 
     $conn -> beginTransaction();
 

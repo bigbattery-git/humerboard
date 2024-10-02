@@ -82,18 +82,16 @@
       <div class="introduce-content-textarea">
         <div class="introduce-content-textarea-title">
           <p class="introduce-content-textarea-title-text">
-            반갑습니다!
+            선택받은 이야기
           </p>
         </div>
         <div class="introduce-content-textarea-content">
           <p class="introduce-content-textarea-content-text">
-            여러분들은 모두 디지털 세계의 선택받은 분들이 될 수 있습니다!
-            <br>
-            이 세계가 궁금하다면?
+            특별한 아이들의 이야기를 나눠요.
           </p>
         </div>
         <div class="introduce-content-textarea-button">
-          <a href="#"><button type="button">알아보기</button></a>
+          <a href="/aboutme.php"><button type="button">알아보기</button></a>
         </div>
       </div>
       <div class="introduce-content-img_area">
@@ -103,23 +101,21 @@
 
     <div class="introduce-content-right">
       <div class="introduce-content-img_area">
-        <div class="introduce-content-img_area-img"></div>
+        <div class="introduce-content-img_area-img" style="background-image: url('https://i.pinimg.com/564x/92/eb/10/92eb103d8f04c5c11b1acdf6e3e5b64d.jpg');"></div>
       </div>
       <div class="introduce-content-textarea">
         <div class="introduce-content-textarea-title">
           <p class="introduce-content-textarea-title-text">
-            반갑습니다 여러분!
+            운명적 만남터
           </p>
         </div>
         <div class="introduce-content-textarea-content">
           <p class="introduce-content-textarea-content-text">
-            여러분들은 모두 디지털 세계의 선택받은 분들이 될 수 있습니다!
-            <br>
-            이 세계가 궁금하다면?
+            선택받은 자들의 다양한 이야기
           </p>
         </div>
         <div class="introduce-content-textarea-button">
-          <a href="#"><button type="button">알아보기</button></a>
+          <a href="/board.php"><button type="button">알아보기</button></a>
         </div>
       </div>
     </div>
@@ -128,22 +124,22 @@
       <div class="introduce-content-textarea">
         <div class="introduce-content-textarea-title">
           <p class="introduce-content-textarea-title-text">
-            반갑습니다 여러분!
+            선택의 문으로
           </p>
         </div>
         <div class="introduce-content-textarea-content">
           <p class="introduce-content-textarea-content-text">
-            여러분들은 모두 디지털 세계의 선택받은 분들이 될 수 있습니다!
-            <br>
-            이 세계가 궁금하다면?
+            선택받은 자들의 세계로 입장하세요
           </p>
         </div>
         <div class="introduce-content-textarea-button">
-          <a href="#"><button type="button">알아보기</button></a>
+          <?php if(!isset($_SESSION["id"])) { ?>
+            <a href="/login.php"><button type="button">알아보기</button></a>
+          <?php } ?>
         </div>
       </div>
       <div class="introduce-content-img_area">
-        <div class="introduce-content-img_area-img"></div>
+        <div class="introduce-content-img_area-img" style="background-image: url('https://i.pinimg.com/564x/91/7e/4c/917e4c07c97f2f55c33666c21b8660fe.jpg');"></div>
       </div>
     </div>
   </main>

@@ -277,9 +277,56 @@ SELECT boards.board_id, boards.title, users.user_name, boards.created_at, boards
 FROM boards
 	JOIN users
 	ON boards.user_id = users.user_id
-	AND boards.created_at IS NULL
-WHERE boards.title LIKE '%가%'
+	AND boards.deleted_at IS NULL
+WHERE boards.title LIKE CONCAT('%', '가사','%')
 ORDER BY boards.board_id DESC
 LIMIT 10
 OFFSET 0
 ;
+
+SELECT 
+CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw
+FROM users
+WHERE user_name = '노노노'
+AND CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = 'Wkwkdaus12!@'
+;
+
+CREATE TABLE comments (
+	comment_id BIGINT(30) UNSIGNED PRIMARY KEY AUTO_INCREMENT 
+	,user_id BIGINT(30) UNSIGNED NOT NULL
+	,board_id BIGINT(30) UNSIGNED NOT NULL
+	,content VARCHAR(1000) NOT NULL
+	,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+	,updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+	,deleted_at TIMESTAMP NULL
+);
+
+ALTER TABLE comments ADD CONSTRAINT fk_comments_user_id 
+FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+ALTER TABLE comments ADD CONSTRAINT fk_comments_board_id 
+FOREIGN KEY (board_id) REFERENCES boards(board_id);
+
+SELECT 
+comments.comment_id
+,users.user_name
+,comments.content
+FROM 
+comments
+JOIN users
+ON comments.user_id = users.user_id
+JOIN boards
+ON comments.user_id = boards.user_id
+AND boards.board_id = 1
+;
+
+INSERT INTO comments(
+	user_id
+	,board_id
+	,content
+)
+VALUES(
+	:user_id
+	,:board_id
+	,:content
+);

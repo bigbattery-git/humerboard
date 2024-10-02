@@ -7,7 +7,7 @@
   session_start();
   $conn;
   try{
-    $user_name = isset($_SESSION["id"])? $_SESSION : throw_error();
+    $user_id = isset($_SESSION["id"])? $_SESSION : throw_error();
     $conn = my_db_conn();
     if(strtoupper($_SERVER["REQUEST_METHOD"]) === "GET"){
       $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;

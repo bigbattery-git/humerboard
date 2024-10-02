@@ -133,7 +133,7 @@ function get_board_count(PDO $conn){
  * @param $user_password = 비밀번호 입력 정보 
  */
 
-function is_already_account(PDO $conn, string $user_name, string $user_password){
+function is_already_account(PDO $conn, string $user_name, string $user_password, int &$user_id = -1){
 
   // 아이디 있는지 확인, 비밀번호 있는지 확인
   
@@ -143,8 +143,9 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
   }
 
   $sql = 
-  " SELECT ". 
-  " CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw ".
+  " SELECT ".
+  " user_id ".
+  " ,CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) AS pw ".
   " FROM users ".
   " WHERE user_name = :user_name ".
   " AND CONVERT(AES_DECRYPT(UNHEX(PASSWORD), 'testkey') USING UTF8) = :pw ".
@@ -169,6 +170,8 @@ function is_already_account(PDO $conn, string $user_name, string $user_password)
     throw new Exception("계정이 없거나 비밀번호가 맞지 않습니다.");
     return false;
   }
+
+  $user_id = $result["user_id"];
 
   return true;
 }
@@ -263,6 +266,7 @@ function get_board_detail(PDO $conn, int $board_id){
   " SELECT                            ".
   " boards.board_id,                  ".
   " boards.title,                     ".
+  " boards.user_id,                   ".
   " users.user_name,                  ". 
   " boards.created_at,                ". 
   " boards.views,                     ".
@@ -340,7 +344,7 @@ function insert_board(PDO $conn, array $arr_param){
   " views                                                    ".
   " )                                                        ".
   " VALUES(                                                  ".
-  " (SELECT user_id FROM users WHERE user_name = :user_name) ".
+  " :user_id                                                 ".
   " ,:title                                                  ".
   " ,:content                                                ".
   " ,1                                                       ".

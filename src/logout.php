@@ -5,5 +5,11 @@ unset($_SESSION["id"]);
 
 session_destroy();
 
-header("Location: /index.php");
+$referer = isset($_POST["referer"]) ? $_POST["referer"] : "index.php";
+
+if(strstr($referer, "joincomplete")|| strstr($referer, "joinmembership")){
+  $referer = "index.php";
+}
+
+header("Location: ".$referer);
 ?>

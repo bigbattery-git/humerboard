@@ -11,8 +11,6 @@
     $board_count = get_board_count($conn);
 
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-    $board_list_count = ceil($board_count/MY_BOARD_COUNT_BY_ONE_PAGE);
-
     $search = isset($_GET["search"]) ? $_GET["search"] : null;
 
     $offset = MY_BOARD_COUNT_BY_ONE_PAGE * ($page - 1);
@@ -35,6 +33,7 @@
 
       $result = get_board_list_search($conn, $arr_prepare);
     }
+    $board_list_count = ceil($board_count/MY_BOARD_COUNT_BY_ONE_PAGE);
   }
   catch(Throwable $th){
 

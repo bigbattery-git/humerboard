@@ -5,11 +5,11 @@
   session_start();
 
   $conn = null;
-  $user_name = null;
+  $user_id = null;
   try{
 
     if(isset($_SESSION["id"])){
-      $user_name = $_SESSION["id"];
+      $user_id = $_SESSION["id"];
     }
     else{
       throw new Exception("잘못된 접근입니다. : 로그인 필요");
@@ -21,7 +21,7 @@
       $content = isset($_POST["content"]) ? $_POST["content"] : "";
 
       $arr_prepare = [
-        "user_name" => $user_name,
+        "user_id" => $user_id,
         "title" => $title,
         "content" => $content
       ];

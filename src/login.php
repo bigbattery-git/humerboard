@@ -6,21 +6,25 @@
 
   try{
     if(strtoupper($_SERVER["REQUEST_METHOD"]) === "POST"){
-      $id = isset($_POST["id"]) ? $_POST["id"] : "";
+      $user_name = isset($_POST["id"]) ? $_POST["id"] : "";
       $password = isset($_POST["pw"]) ? $_POST["pw"] : "";
+      $user_id = 0;
       $conn = my_db_conn();
-      $referer = isset($_POST["referer"]) ? mb_substr($_POST["referer"], 17) : "index.php";
+      $referer = isset($_POST["referer"]) ? $_POST["referer"] : "index.php";
 
-      if(!is_already_account($conn, $id, $password)){
-        throw new Exception("계정이 옳지 않습니다.".$id."\n".$password."\n");
+      if(strstr($referer, "joincomplete")|| strstr($referer, "joinmembership")){
+        $referer = "index.php";
+      }
+
+      if(!is_already_account($conn, $user_name, $password, $user_id)){
+        throw new Exception("계정이 옳지 않습니다.".$user_name."\n".$password."\n");
       }
   
       session_start();
   
-      $_SESSION["id"] = $id;
-
+      $_SESSION["id"] = $user_id;
       
-      header("Location: /".$referer);
+      header("Location: ".$referer);
     }      
   }
   catch(Throwable $th){
@@ -74,7 +78,7 @@
       </form>
       <div class="main-link_login">
         <p class="main-link_login-text">
-          선택받길 원하신다면 <a href="#">회원가입</a>
+          선택받길 원하신다면 <a href="/joinmembership.php">회원가입</a>
         </p>
       </div>
       <div class="main-link_login">
