@@ -9,7 +9,8 @@
       $id = isset($_POST["id"]) ? $_POST["id"] : "";
       $password = isset($_POST["pw"]) ? $_POST["pw"] : "";
       $conn = my_db_conn();
-  
+      $referer = isset($_POST["referer"]) ? mb_substr($_POST["referer"], 17) : "index.php";
+
       if(!is_already_account($conn, $id, $password)){
         throw new Exception("계정이 옳지 않습니다.".$id."\n".$password."\n");
       }
@@ -17,8 +18,9 @@
       session_start();
   
       $_SESSION["id"] = $id;
+
       
-      header("Location: /index.php");
+      header("Location: /".$referer);
     }      
   }
   catch(Throwable $th){
@@ -51,6 +53,7 @@
       </div>
       <hr>
       <form action="" method="post">
+        <input type="hidden" name="referer" value="<?php echo $_SERVER["HTTP_REFERER"]; ?>">
         <div class="main-form form-id">
           <label for="id" class="main-form-label">
             <div class="main-form-label-icon">

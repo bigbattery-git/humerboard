@@ -71,10 +71,10 @@
         <div class="utility">
           <div class="utility-buttons">
             <?php if($is_myboard) { ?>
-            <a href="/update.php?<?php echo "board_id=".$board_id."&user_name=".$user_name."&page=".$page ?>" class="utility-a">
+            <a href="/update.php?<?php echo "board_id=".$board_id."&page=".$page ?>" class="utility-a">
               <button class="utility-button">게시글 수정</button>
             </a>
-            <a href="#" class="utility-a">
+            <a href="/delete.php?<?php echo "board_id=".$board_id."&page=".$page ?>" class="utility-a">
               <button class="utility-button delete">게시글 삭제</button>
             </a>
             <?php } ?>

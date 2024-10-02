@@ -253,3 +253,33 @@ title = :title
 WHERE 
 board_id = :board_id
 ;
+
+SELECT 
+board_id 
+,title
+,views
+FROM
+boards
+ORDER BY views DESC
+LIMIT 5
+;
+
+UPDATE 
+boards
+SET 
+updated_at = NOW()
+,deleted_at = NOW()
+WHERE
+board.id = :board.id
+;
+
+SELECT boards.board_id, boards.title, users.user_name, boards.created_at, boards.views
+FROM boards
+	JOIN users
+	ON boards.user_id = users.user_id
+	AND boards.created_at IS NULL
+WHERE boards.title LIKE '%가%'
+ORDER BY boards.board_id DESC
+LIMIT 10
+OFFSET 0
+;

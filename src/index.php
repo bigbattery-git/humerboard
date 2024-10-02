@@ -21,6 +21,8 @@
     ];
 
     $result_newboard = get_board_list($conn, $arr_prepare_newboard);
+
+    $result_hotboard = get_board_list_mostview($conn);
   }
   catch(Throwable $th){
     
@@ -50,7 +52,7 @@
         <div class="board-list">
           <?php foreach($result_newboard as $value) { ?>
             <ul class="board-list-ul">
-              <a href="./detail.php?<?php echo "board_id=".$value["board_id"]."&page=1" ?>">
+              <a href="/detail.php?<?php echo "board_id=".$value["board_id"]."&page=1"; ?>">
                 <li class="board-list-li-title"><?php echo get_title_formet($value["title"], 12); ?></li>
               </a>
               <li class="board-list-li-created_at"><?php echo get_date_formet($value["created_at"]); ?></li>
@@ -64,26 +66,14 @@
           <p class="board-title-text">인기 게시글</p>
         </div>
         <div class="board-list">
-          <ul class="board-list-ul">
-            <a href="#"><li class="board-list-li-title">제목</li></a>
-            <li class="board-list-li-created_at">24-09-30</li>
-          </ul>
-          <ul class="board-list-ul">
-            <a href="#"><li class="board-list-li-title">제목</li></a>
-            <li class="board-list-li-created_at">24-09-30</li>
-          </ul>
-          <ul class="board-list-ul">
-            <a href="#"><li class="board-list-li-title">제목</li></a>
-            <li class="board-list-li-created_at">24-09-30</li>
-          </ul>
-          <ul class="board-list-ul">
-            <a href="#"><li class="board-list-li-title">제목</li></a>
-            <li class="board-list-li-created_at">24-09-30</li>
-          </ul>
-          <ul class="board-list-ul">
-            <a href="#"><li class="board-list-li-title">제목</li></a>
-            <li class="board-list-li-created_at">24-09-30</li>
-          </ul>
+          <?php foreach($result_hotboard as $value) { ?>
+            <ul class="board-list-ul">
+              <a href="/detail.php?<?php echo "board_id=".$value["board_id"]."&page=1"; ?>">
+                <li class="board-list-li-title"><?php echo get_title_formet($value["title"], 12); ?></li>
+              </a>
+              <li class="board-list-li-created_at"><?php echo $value["views"]; ?></li>
+            </ul>
+          <?php } ?>
         </div>
       </div>
     </div>

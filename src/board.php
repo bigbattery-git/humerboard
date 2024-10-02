@@ -11,17 +11,30 @@
     $board_count = get_board_count($conn);
 
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-
     $board_list_count = ceil($board_count/MY_BOARD_COUNT_BY_ONE_PAGE);
+
+    $search = isset($_GET["search"]) ? $_GET["search"] : null;
 
     $offset = MY_BOARD_COUNT_BY_ONE_PAGE * ($page - 1);
 
-    $arr_prepare = [
-      "limit" => MY_BOARD_COUNT_BY_ONE_PAGE,
-      "offset" => $offset 
-    ];
+    if(is_null($search)){
+      $arr_prepare = [
+        "limit" => MY_BOARD_COUNT_BY_ONE_PAGE,
+        "offset" => $offset 
+      ];
+  
+      $result = get_board_list($conn, $arr_prepare);
+    }
 
-    $result = get_board_list($conn, $arr_prepare);
+    else{
+      $arr_prepare = [
+        "limit" => MY_BOARD_COUNT_BY_ONE_PAGE,
+        "offset" => $offset, 
+        "search" => $search
+      ];
+
+      $result = get_board_list_search($conn, $arr_prepare);
+    }
   }
   catch(Throwable $th){
 
@@ -56,7 +69,7 @@
         </div>
       </a>
       <div class="board_area">
-        <form action="#" method="get">
+        <form action="/board.php" method="get">
           <div class="search_area">
             <label for="search">
               <i class="fa-solid fa-magnifying-glass"></i>
@@ -97,7 +110,7 @@
         <ul class="utility-board_list_num-ul">
           <li class="utility-board_list_num-li"><a href="">이전</a></li>
           <?php for($i = 1; $i <= $board_list_count; $i++){ ?>
-            <li class="utility-board_list_num-li"><a href="/board.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <li class="utility-board_list_num-li"><a href="/board.php?<?php echo "page=".$i."&search=".$search ?>"><?php echo $i ?></a></li>
           <?php } ?> 
           <li class="utility-board_list_num-li"><a href="">다음</a></li>
         </ul>

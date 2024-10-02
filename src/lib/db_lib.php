@@ -40,6 +40,7 @@ function get_board_list(PDO $conn, array $arr_param){
 	" JOIN users                     ".
 	" ON                             ". 
   " boards.user_id = users.user_id ".
+  " AND boards.deleted_at IS NULL  ".
   " ORDER BY boards.board_id DESC  ".
   " LIMIT :limit                   ".
   " OFFSET :offset                 ";
@@ -50,6 +51,59 @@ function get_board_list(PDO $conn, array $arr_param){
   if(!$result_flg){
     throw new Exception("Error - Query failed : get_board_list");
   }
+
+  $result = $stmt -> fetchAll();
+
+  return $result;
+}
+
+function get_board_list_search(PDO $conn, array $arr_param){
+
+  $sql = 
+  " SELECT                                     ".
+  " boards.board_id                            ".
+  " ,boards.title                              ".
+  " ,users.user_name                           ".
+  " ,boards.created_at                         ".
+  " ,boards.views                              ".
+  " FROM boards                                ".
+  " JOIN users                                 ".
+  " ON boards.user_id = users.user_id          ".
+  " AND boards.deleted_at IS NULL              ".
+  " WHERE                                      ". 
+  " boards.title LIKE CONCAT('%', :search,'%') ".
+  " ORDER BY boards.board_id DESC              ".
+  " LIMIT :limit                               ".
+  " OFFSET :offset                             ".
+  " ;                                          "
+  ;
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_param);
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : get_board_list_search");
+  }
+
+  $result = $stmt -> fetchAll();
+
+  return $result;
+}
+
+function get_board_list_mostview(PDO $conn){
+  $sql =
+  " SELECT ". 
+  " board_id ".
+  " ,title ".
+  " ,views ".
+  " FROM ".
+  " boards ".
+  " ORDER BY views DESC ".
+  " LIMIT 5 ".
+  " ; "
+  ;
+
+  $stmt = $conn -> query($sql);
 
   $result = $stmt -> fetchAll();
 
@@ -340,3 +394,33 @@ function update_board(PDO $conn, array $arr_param){
     throw new Exception("Error - Query count over : update_board");
   }
 }
+
+function delete_board(PDO $conn, int $board_id){
+
+  $sql =
+  " UPDATE               ".
+  " boards               ".
+  " SET                  ". 
+  " updated_at = NOW()   ".
+  " ,deleted_at = NOW()  ".
+  " WHERE                ".
+  " board_id = :board_id ".
+  " ; "
+  ;
+
+  $arr_prepare = [
+    "board_id" => $board_id
+  ];
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : delete_board");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : delete_board");
+  }
+} 
