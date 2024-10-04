@@ -429,18 +429,27 @@ function get_board_comment(PDO $conn, array | int $arr_param){
 
   $sql = 
   " SELECT ".
-  " comments.comment_id AS comment_id ".
-  " ,users.user_name AS user_name ".
-  " ,comments.user_id AS user_id ".
-  " ,comments.content AS content ".
+  " boards.board_id ".
+  " , comments.comment_id ".
+  " , comments.user_id ".
+  " , comments.content ".
+  " , (SELECT users.user_name FROM users WHERE users.user_id = comments.user_id) AS user_name ".
   " FROM ".
   " comments ".
-  " JOIN users ".
-  " ON comments.user_id = users.user_id ".
-  " JOIN boards ".
-  " ON comments.user_id = boards.user_id ".
-  " AND boards.board_id = :board_id ".
-  " ORDER BY comments.comment_id desc ".
+  " JOIN ".
+  " boards ".
+  " ON ".
+  " comments.board_id = boards.board_id ".
+  " AND ".
+  " boards.board_id = :board_id ".
+  " AND ".
+  " comments.deleted_at IS NULL".
+  " JOIN ".
+  " users ".
+  " ON ".
+  " boards.user_id = users.user_id ".
+  " ORDER BY ".
+  " comments.comment_id DESC ".
   " ; "
   ;
 
@@ -488,5 +497,38 @@ function insert_comment(PDO $conn, array $arr_param){
 
   if($result_cnt > 1){
     throw new Exception("Error - Query count over : insert_comment");
+  }
+}
+
+function delete_comment(PDO $conn, array | int $arr_param){
+  $sql = 
+  " UPDATE ".
+  " comments ".
+  " SET ".
+  " updated_at = NOW() ".
+  " ,deleted_at = NOW() ".
+  " WHERE ".
+  " comment_id = :comment_id ".
+  " ; ";
+
+  $type = gettype($arr_param);
+  $arr_prepare = null;
+  if($type === "number"){
+    $arr_prepare["comment_id"] = $arr_param;
+  }
+  else{
+    $arr_prepare = $arr_param;
+  }
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : delete_comment");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : delete_comment");
   }
 }

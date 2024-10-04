@@ -24,15 +24,9 @@
 
     $conn -> commit();
 
-
-
     $result = get_board_detail($conn, $arr_prepare);
 
     $result_comment = get_board_comment($conn, $arr_prepare);
-
-    if(strtoupper($_SERVER["REQUEST_METHOD"]) === "POST"){
-
-    }
   }
   catch(Throwable $th){
     if(!is_null($conn) && $conn->inTransaction()){
@@ -51,7 +45,69 @@
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/detail.css">
   <script src="https://kit.fontawesome.com/351a912326.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Document</title>
+
+  
+  <script>
+const $url = '<?php echo "/lib/comment.php"; ?>'
+
+function insert_comment(){
+  const $content = $('#comment').val();
+
+  $.ajax({
+    url: $url
+    ,type:'POST'
+    ,data: {
+      action : 'insert'
+      ,user_id : <?php echo $user_id; ?>
+      ,board_id : <?php echo $board_id; ?>
+      ,content : $content
+    }
+    ,success : function(data){
+      alert("작성 성공");
+    }
+    ,error : function(error){
+      alert(error);
+    }
+  })
+
+  location.reload(true);
+}
+
+function delete_comment(comment_id){
+  $.ajax({
+    url: $url
+    ,type: 'POST'
+    ,data:{
+      action: 'delete'
+      ,comment_id : Number(comment_id)
+    }
+    ,success : function(data){
+      alert('삭제 완료');
+    }
+    ,error : function(error){
+      alert('삭제 실패: '+error );
+    }
+  })
+
+  location.reload(true);
+}
+
+function delete_comment_event(comment_id){
+  if(confirm("정말로 댓글을 삭제하시겠습니까?")){
+    console.log(comment_id);
+    delete_comment(comment_id);
+  }
+  else{
+    return;
+  }
+}
+
+const $detailContent = document.getElementById('content');
+autoResize($detailContent);
+
+</script>
 </head>
 <body>
   <?php
@@ -76,7 +132,7 @@
         </ul>
   
         <div class="main-content_area">
-          <textarea name="content" id="content" readonly rows="<?php echo mb_substr_count($result["content"], "\n"); ?>" ><?php echo $result["content"]; ?></textarea>
+          <textarea name="content" id="content" readonly rows="<?php echo mb_substr_count($result["content"], "\n"); ?>"><?php echo $result["content"]; ?></textarea>
         </div>
   
         <div class="utility">
@@ -104,22 +160,12 @@
         </ul>
         <hr>
         <?php foreach($result_comment as $value) { ?>
-          <form action="/detail.php" method="post">
+          <form method="post" id="comment_form">
             <ul class="comment_area_ul">
               <li class="comment_area_li comment_name"><?php echo $value["user_name"]; ?></li>
               <li class="comment_area_li comment_comment"><?php echo $value["content"]; ?></li>
               <?php if($value["user_id"] === $user_id) { ?>
-                <li class="comment_area_li comment_delete"><button type="button" onclick="delete_comment();">삭제</button></li>
-                <script>
-                  function delete_comment(){
-                    if(confirm("정말로 댓글을 삭제하시겠습니까?")){
-                      alert("삭제완료");
-                    }
-                    else{
-                      return;
-                    }
-                  }
-                </script>
+                <li class="comment_area_li comment_delete"><button type="button" onclick="delete_comment_event(<?php echo $value['comment_id'] ?>);">삭제</button></li>
               <?php }?>
               <input type="hidden" name="comment_id" value="<?php echo $value["user_id"]; ?>">
             </ul>
@@ -127,7 +173,7 @@
         <?php } ?>
       </div>
       <?php if(!is_null($user_id)) { ?>
-        <form action="/detail.php?<?php echo "board_id=".$board_id."&page=".$page; ?>" method="post" class="comment_form_area">
+        <form  method="post" class="comment_form_area" id="form">
           <textarea name="comment" id="comment" oninput="autoResize(this)"></textarea>
           <script>
             function autoResize(textarea) {
@@ -135,7 +181,7 @@
               textarea.style.height = textarea.scrollHeight + 'px' // 스크롤 높이에 맞게 높이 설정
             }
           </script>
-          <button type="submit"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+          <button type="button" onclick="insert_comment();"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
         </form>
       <?php } ?>
 

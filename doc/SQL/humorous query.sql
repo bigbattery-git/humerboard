@@ -330,3 +330,22 @@ VALUES(
 	,:board_id
 	,:content
 );
+
+UPDATE 
+comments
+SET
+updated_at = NOW()
+,deleted_at = NOW()
+WHERE
+user_id = :user_id
+;
+
+SELECT boards.board_id, comments.comment_id, comments.user_id, users.user_name, comments.content
+FROM comments
+JOIN boards
+ON comments.board_id = boards.board_id
+AND boards.board_id = 19
+JOIN users
+ON boards.user_id = users.user_id
+ORDER BY comments.comment_id DESC
+;
