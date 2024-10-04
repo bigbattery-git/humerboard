@@ -340,7 +340,7 @@ WHERE
 user_id = :user_id
 ;
 
-SELECT boards.board_id, comments.comment_id, comments.user_id, users.user_name, comments.content
+SELECT boards.board_id, comments.comment_id, comments.user_id, comments.content, (SELECT users.user_name FROM users WHERE users.user_id = comments.user_id) AS user_name
 FROM comments
 JOIN boards
 ON comments.board_id = boards.board_id
