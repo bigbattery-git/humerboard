@@ -8,10 +8,13 @@
   try{
     $conn = my_db_conn();
     $board_id = isset($_GET["board_id"]) ? (int)$_GET["board_id"] : 0;
-    $user_id = isset($_SESSION["id"]) ?  $_SESSION["id"] : "";
+    $user_id = isset($_SESSION["id"]) ?  $_SESSION["id"] : null;
     $page = isset($_GET["page"]) ? $_GET["page"] : 1;
+    $arr_prepare = [
+      "board_id" => $board_id
+    ];
 
-    $result = get_board_detail($conn, $board_id);
+    $result = get_board_detail($conn, $arr_prepare);
 
     $is_myboard = $result["user_id"] === $user_id ? true : false; 
 
@@ -21,7 +24,15 @@
 
     $conn -> commit();
 
-    $result = get_board_detail($conn, $board_id);
+
+
+    $result = get_board_detail($conn, $arr_prepare);
+
+    $result_comment = get_board_comment($conn, $arr_prepare);
+
+    if(strtoupper($_SERVER["REQUEST_METHOD"]) === "POST"){
+
+    }
   }
   catch(Throwable $th){
     if(!is_null($conn) && $conn->inTransaction()){
@@ -85,7 +96,50 @@
             </div>
           </a>
       </div>
+
+      <div class="comment_area">
+        <ul class="comment_area_ul">
+          <li class="comment_area_li comment_name">이름</li>
+          <li class="comment_area_li comment_comment">댓글</li>
+        </ul>
+        <hr>
+        <?php foreach($result_comment as $value) { ?>
+          <form action="/detail.php" method="post">
+            <ul class="comment_area_ul">
+              <li class="comment_area_li comment_name"><?php echo $value["user_name"]; ?></li>
+              <li class="comment_area_li comment_comment"><?php echo $value["content"]; ?></li>
+              <?php if($value["user_id"] === $user_id) { ?>
+                <li class="comment_area_li comment_delete"><button type="button" onclick="delete_comment();">삭제</button></li>
+                <script>
+                  function delete_comment(){
+                    if(confirm("정말로 댓글을 삭제하시겠습니까?")){
+                      alert("삭제완료");
+                    }
+                    else{
+                      return;
+                    }
+                  }
+                </script>
+              <?php }?>
+              <input type="hidden" name="comment_id" value="<?php echo $value["user_id"]; ?>">
+            </ul>
+          </form>
+        <?php } ?>
       </div>
+      <?php if(!is_null($user_id)) { ?>
+        <form action="/detail.php?<?php echo "board_id=".$board_id."&page=".$page; ?>" method="post" class="comment_form_area">
+          <textarea name="comment" id="comment" oninput="autoResize(this)"></textarea>
+          <script>
+            function autoResize(textarea) {
+              textarea.style.height = 'auto' // 높이를 자동으로 초기화
+              textarea.style.height = textarea.scrollHeight + 'px' // 스크롤 높이에 맞게 높이 설정
+            }
+          </script>
+          <button type="submit"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+        </form>
+      <?php } ?>
+
+    </div>
   </main>
   <?php
     require_once(MY_ROOT_FOOTER);

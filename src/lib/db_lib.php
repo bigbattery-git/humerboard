@@ -260,7 +260,7 @@ function join_membership(PDO $conn, string $user_name, string $user_password){
  * @param $board_id = 게시글 번호
  */
 
-function get_board_detail(PDO $conn, int $board_id){
+function get_board_detail(PDO $conn, array $arr_param){
 
   $sql = 
   " SELECT                            ".
@@ -278,12 +278,8 @@ function get_board_detail(PDO $conn, int $board_id){
   " ;                                 "
   ;
 
-  $arr_prepare = [
-    "board_id" => $board_id
-  ];
-
   $stmt = $conn -> prepare($sql);
-  $result_flg = $stmt -> execute($arr_prepare);
+  $result_flg = $stmt -> execute($arr_param);
 
   if(!$result_flg){
     throw new Exception("Error - Query failed : get_board_detail");
@@ -428,3 +424,69 @@ function delete_board(PDO $conn, int $board_id){
     throw new Exception("Error - Query count over : delete_board");
   }
 } 
+
+function get_board_comment(PDO $conn, array | int $arr_param){
+
+  $sql = 
+  " SELECT ".
+  " comments.comment_id AS comment_id ".
+  " ,users.user_name AS user_name ".
+  " ,comments.user_id AS user_id ".
+  " ,comments.content AS content ".
+  " FROM ".
+  " comments ".
+  " JOIN users ".
+  " ON comments.user_id = users.user_id ".
+  " JOIN boards ".
+  " ON comments.user_id = boards.user_id ".
+  " AND boards.board_id = :board_id ".
+  " ORDER BY comments.comment_id desc ".
+  " ; "
+  ;
+
+  $arr_prepare = null;
+  if(gettype($arr_param) === "intiger"){
+    $arr_prepare = [
+      "board_id" => $arr_param
+    ];
+  }
+  else{
+    $arr_prepare = $arr_param;
+  }
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_prepare);
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : get_board_detail");
+  }
+
+  return $stmt->fetchAll();
+}
+
+function insert_comment(PDO $conn, array $arr_param){
+  $sql = 
+  " INSERT INTO comments( ".
+  " user_id ".
+  " ,board_id ".
+  " ,content ".
+  " ) ".
+  " VALUES( ".
+  " :user_id ".
+  " ,:board_id ".
+  " ,:content ".
+  " ); "
+  ;
+
+  $stmt = $conn -> prepare($sql);
+  $result_flg = $stmt -> execute($arr_param);
+  $result_cnt = $stmt -> rowCount();
+
+  if(!$result_flg){
+    throw new Exception("Error - Query failed : insert_comment");
+  }
+
+  if($result_cnt > 1){
+    throw new Exception("Error - Query count over : insert_comment");
+  }
+}

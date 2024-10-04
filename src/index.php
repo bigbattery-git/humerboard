@@ -13,7 +13,7 @@
     else{
       $user_name = "";
     }
-
+    
     $conn = my_db_conn();
     $arr_prepare_newboard=[
       "limit" => 5,

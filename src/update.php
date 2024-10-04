@@ -23,8 +23,11 @@
       $page = isset($_GET["page"]) ? (int)$_GET["page"] : throw_error();
 
       $conn = my_db_conn();
+      $arr_prepare = [
+        "board_id" => $board_id 
+      ];
 
-      $result = get_board_detail($conn, $board_id);
+      $result = get_board_detail($conn, $arr_prepare);
     }
     else{
       $conn = my_db_conn();
