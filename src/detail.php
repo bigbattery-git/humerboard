@@ -94,6 +94,9 @@ function delete_comment(comment_id){
   location.reload(true);
 }
 
+  /**@function 댓글 삭제 시 팝업 경고 
+   * @param {number} comment_id 댓글PK
+  */
 function delete_comment_event(comment_id){
   if(confirm("정말로 댓글을 삭제하시겠습니까?")){
     console.log(comment_id);
