@@ -134,3 +134,8 @@ main{
 .utility-button:hover{
   cursor: pointer;
 }
+
+.comment_area_ul{
+  display: grid;
+  grid-template-columns: 10rem, minmax(50rem, 1fr), 2rem;
+}
