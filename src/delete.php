@@ -13,7 +13,11 @@
       $page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
       $board_id = isset($_GET["board_id"]) ? (int)$_GET["board_id"] : throw_error();
 
-      $result = get_board_detail($conn, $board_id);
+      $arr_prepare =[
+        "board_id" => $board_id
+      ];
+
+      $result = get_board_detail($conn, $arr_prepare);
     }
 
     else{

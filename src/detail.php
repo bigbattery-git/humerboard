@@ -52,8 +52,61 @@
   <script>
 const $url = '<?php echo "/lib/comment.php"; ?>'
 
+function insert_comment_element(name, content, id, sessId = -1){
+  try{
+  const $parent = document.querySelector('hr');
+
+  const form = document.createElement('form');
+  form.id = 'comment_form'
+  form.setAttribute('method', 'post');
+
+  const ul = document.createElement('ul');
+  ul.classList.add('comment_area_ul');
+
+  const li_name = document.createElement('li');
+  li_name.classList.add('comment_area_li');
+  li_name.classList.add('comment_name');
+
+  const li_comment = document.createElement('li');
+  li_comment.classList.add('comment_area_li');
+  li_comment.classList.add('comment_comment');
+
+  const li_button = document.createElement('li');
+  li_button.classList.add('comment_area_li');
+  li_button.classList.add('comment_delete');
+
+  const button = document.createElement('button');
+  button.setAttribute('type', 'button');
+  button.textContent = '삭제';
+  
+  const commend_id = document.createElement('input');
+  commend_id.setAttribute('type', 'hidden');
+  commend_id.setAttribute('name', 'comment_id');
+  commend_id.setAttribute('value', String(id));
+
+  const readyForm = $parent.appendChild(form);
+  const readyUl = readyForm.appendChild(ul);
+  li_name.textContent = String(name);
+  readyUl.appendChild(li_name);
+  li_comment.textContent = String(content);
+  readyUl.appendChild(li_comment);
+  if(Number(sessId) === id){
+    readyUl.appendChild()
+  }
+  readyUl.appendChild(commend_id);
+  }
+  catch(err){
+    alert(err);
+  }
+}
+
 function insert_comment(){
   const $content = $('#comment').val();
+
+  if($content === "" || $content === null){
+    alert("내용을 입력하세요");
+    return;
+  }
 
   $.ajax({
     url: $url
@@ -66,13 +119,20 @@ function insert_comment(){
     }
     ,success : function(data){
       alert("작성 성공");
+      console.log(data);
+      try{
+        const printData = data['comment_data'][data['comment_data'].count - 1];
+        const sessId = data['session_id'];
+        insert_comment_element(printData['user_name'],printData['content'], printData['user_id'], sessId);
+      }
+      catch(err){
+        alert(err);
+      }
     }
     ,error : function(error){
       alert(error);
     }
   })
-
-  location.reload(true);
 }
 
 function delete_comment(comment_id){

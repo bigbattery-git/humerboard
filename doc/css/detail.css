@@ -137,5 +137,35 @@ main{
 
 .comment_area_ul{
   display: grid;
-  grid-template-columns: 10rem, minmax(50rem, 1fr), 2rem;
+  grid-template-columns: 10rem minmax(30rem, 1fr) 3rem;
+
+  margin : 0.5rem 0;
+
+  align-items: center;
+}
+
+.comment_area_ul button{
+  border: none;
+
+  padding : 0.5rem;
+}
+
+.comment_form_area{
+  display: flex;
+  align-items: flex-end;
+  gap : 1rem;
+}
+
+.comment_form_area textarea{
+  min-width: 40rem;
+  max-width: 100%;
+
+  resize: none;
+}
+
+.comment_form_area button{
+  width: 2rem;
+  height: 2rem;
+
+  border: none;
 }

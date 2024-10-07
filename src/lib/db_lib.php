@@ -498,6 +498,13 @@ function insert_comment(PDO $conn, array $arr_param){
   if($result_cnt > 1){
     throw new Exception("Error - Query count over : insert_comment");
   }
+
+  session_start();
+
+  echo json_encode([
+    'comment_data' => get_board_comment(my_db_conn(), $arr_param["board_id"])
+    ,'session_id' => $_SESSION["id"]
+  ]);
 }
 
 function delete_comment(PDO $conn, array | int $arr_param){
