@@ -119,20 +119,13 @@ function insert_comment(){
     }
     ,success : function(data){
       alert("작성 성공");
-      console.log(data);
-      try{
-        const printData = data['comment_data'][data['comment_data'].count - 1];
-        const sessId = data['session_id'];
-        insert_comment_element(printData['user_name'],printData['content'], printData['user_id'], sessId);
-      }
-      catch(err){
-        alert(err);
-      }
     }
     ,error : function(error){
       alert(error);
     }
   })
+
+  location.reload(true);
 }
 
 function delete_comment(comment_id){
